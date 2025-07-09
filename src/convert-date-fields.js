@@ -5,15 +5,21 @@ const timezone = require("dayjs/plugin/timezone");
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-// 缓存日期字段集合，提高 Set 查找性能
 const dateFieldsCache = new Map();
 
-// 判断是否为纯对象
 function isPlainObject(obj) {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
-// 转换日期字段
+/**
+ * 递归转换对象或数组中的日期字段为指定时区格式
+ * @param {*} input - 原始数据（对象或数组）
+ * @param {*} options
+ * @param {boolean} [options.convertDates=true] 是否启用转换
+ * @param {string} [options.timezone="Asia/Shanghai"] 目标时区
+ * @param {string[]} [options.dateFields=["createdAt", "updatedAt"]] 要转换的字段名
+ * @returns {*} 转换后的数据
+ */
 function convertDateFields(
   input,
   {
@@ -105,68 +111,11 @@ function convertDateFields(
   return result;
 }
 
-function ok(input, options) {
-  let msg = "success";
-  let code = 0;
-  let data = null;
-  let convertDates = true;
-  let tz = "Asia/Shanghai";
-  let dateFields = ["createdAt", "updatedAt"];
-
-  if (typeof input === "string") {
-    msg = input;
-    if (options) {
-      convertDates =
-        options.convertDates !== undefined ? options.convertDates : true;
-      tz = options.timezone || "Asia/Shanghai";
-      dateFields = options.dateFields || ["createdAt", "updatedAt"];
-    }
-  } else {
-    msg = input.msg || "success";
-    code = input.code !== undefined ? input.code : 0;
-    data = input.data !== undefined ? input.data : null;
-    convertDates = input.convertDates !== undefined ? input.convertDates : true;
-    tz = input.timezone || "Asia/Shanghai";
-    dateFields = input.dateFields || ["createdAt", "updatedAt"];
-  }
-
-  const res = { msg, code };
-  if (data !== null && data !== undefined) {
-    res.data = convertDateFields(data, {
-      convertDates,
-      timezone: tz,
-      dateFields,
-    });
-  }
-  return res;
-}
-
-function clearOkCache() {
+function clearDateFieldsCache() {
   dateFieldsCache.clear();
 }
 
-function fail(input) {
-  let msg = "fail";
-  let code = 400;
-  let data = null;
-
-  if (typeof input === "string") {
-    msg = input;
-  } else if (typeof input === "object" && input !== null) {
-    msg = input.msg || "fail";
-    code = input.code !== undefined ? input.code : 400;
-    data = input.data !== undefined ? input.data : null;
-  }
-
-  const res = { code, msg };
-  if (data !== null && data !== undefined) {
-    res.data = data;
-  }
-  return res;
-}
-
 module.exports = {
-  ok,
-  fail,
-  clearOkCache,
+  convertDateFields,
+  clearDateFieldsCache,
 };

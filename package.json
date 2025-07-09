@@ -1,22 +1,22 @@
 {
-  "name": "handy-utils",
-  "version": "1.0.0",
+  "name": "handy-utils-kit",
+  "version": "1.0.2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "handy-utils",
+    "handy-utils-kit",
     "handy",
     "utils"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/LBC000/handy-utils"
+    "url": "https://github.com/LBC000/handy-utils-kit"
   },
-  "homepage": "https://your-package.org",
+  "homepage": "https://www.npmjs.com/package/handy-utils-kit",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "dayjs": "^1.11.13"

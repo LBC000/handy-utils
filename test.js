@@ -1,8 +1,11 @@
-const { ok, fail, clearOkCache } = require("./src/responseHelper");
+const {
+  convertDateFields,
+  clearDateFieldsCache,
+} = require("./src/convert-date-fields");
 
 function testResponseHelper() {
   console.log("--- test ok with string ---");
-  console.log(ok("Operation successful"));
+  console.log(convertDateFields("Operation successful"));
 
   console.log("--- test ok with data and date conversion ---");
   const inputData = {
@@ -11,18 +14,10 @@ function testResponseHelper() {
       { createdAt: "2023-07-08T12:34:56Z" },
     ],
   };
-  console.log(ok(inputData, { timezone: "UTC" }));
-
-  console.log("--- test fail with string ---");
-  console.log(fail("Something failed"));
-
-  console.log("--- test fail with object ---");
-  console.log(
-    fail({ msg: "Error occurred", code: 500, data: { reason: "test" } })
-  );
+  console.log(convertDateFields(inputData, { timezone: "UTC" }));
 
   console.log("--- test clearOkCache ---");
-  clearOkCache();
+  clearDateFieldsCache();
   console.log("Cache cleared");
 }
 
